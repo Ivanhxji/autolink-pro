@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const qtyMinus = document.getElementById('qtyMinus');
     const qtyPlus = document.getElementById('qtyPlus');
     const buyBtn = document.getElementById('buyBtn');
-    const basePrice = 49.99;
+    const basePrice = 59.99;
 
     function updatePrice() {
         const qty = parseInt(qtyInput.value) || 1;
