@@ -3,7 +3,7 @@
    ============================================ */
 
 // ВСТАВЬ СЮДА URL ИЗ GOOGLE APPS SCRIPT DEPLOY
-const GOOGLE_SHEETS_URL = 'YOUR_GOOGLE_SHEETS_URL_HERE';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwK5VitNwbWC2A3rbGVOh5hQ3JPgD9O6BgLpvORsduTJWZzIrld-pVFm8Nuz1Yo4pw/exec';
 
 const PRODUCT_NAME = 'AutoLink Pro — Wireless CarPlay & Android Auto Adapter';
 const PRODUCT_PRICE = 59.99;
