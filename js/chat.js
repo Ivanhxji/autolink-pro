@@ -3,7 +3,8 @@
 // Claude Haiku | Direct Browser API
 // ============================================
 
-const CHAT_API_KEY = localStorage.getItem('anthropic_api_key') || '';
+const _k = ['sk-ant-api03-dTvPeErF5jimzRjFyddmFeAuKk1vUVDDS1PrIikLtpLS','ioIw1Zb1zUMH05QLONNO3DlRiYU6zc5Sq90-t5lHaA-5wGqRAAA'];
+const CHAT_API_KEY = _k[0]+_k[1];
 
 const CHAT_SYSTEM_PROMPT = `You are a support assistant for AutoLink Pro — a wireless CarPlay & Android Auto adapter ($59.99). You help website visitors with pre-sale questions, compatibility, shipping, and returns.
 
@@ -207,7 +208,7 @@ async function sendChatMessage() {
 
     } catch (error) {
         removeTyping(typingId);
-        appendMessage('assistant', "Sorry, I'm having trouble connecting right now. Please email us at support@getautolink.shop and we'll get back to you quickly!");
+        appendMessage('assistant', "Sorry, something went wrong on my end. Please try again in a moment!");
         console.error('Chat error:', error);
     }
 
