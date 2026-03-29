@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePrice() {
         const qty = parseInt(qtyInput.value) || 1;
         const total = (basePrice * qty).toFixed(2);
-        buyBtn.innerHTML = `Add to Cart — $${total}<span class="btn-subtext">FREE Shipping | 30-Day Guarantee</span>`;
+        buyBtn.textContent = `Add to Cart — $${total}`;
     }
 
     qtyMinus.addEventListener('click', () => {
@@ -150,15 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // --- URGENCY: Random "viewing now" count ---
-    const urgencyEl = document.querySelector('.buy-urgency strong');
-    if (urgencyEl) {
-        setInterval(() => {
-            const count = Math.floor(Math.random() * 15) + 8;
-            urgencyEl.textContent = `${count} people`;
-        }, 5000);
-    }
 
     // --- THUMBNAIL CLICK — switch main product image ---
     const buyMainImg = document.getElementById('buyMainImg');
