@@ -259,46 +259,123 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
-    <section class="features">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Features</span>
-                <h2>Built for drivers who care about specs</h2>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">&#128225;</div>
-                    <h3>Dual-Band WiFi6 + BT 5.4</h3>
-                    <p>2.4GHz + 5GHz dual-band WiFi6 (802.11ax) — the latest standard. Combined with Bluetooth 5.4 for instant pairing. Most cheap adapters use WiFi5 + BT 4.2. The difference: zero lag, zero drops.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128260;</div>
-                    <h3>True 2-in-1</h3>
-                    <p>One adapter for both CarPlay (iPhone) AND Android Auto. Switch phones? No problem. Family car with iPhone and Samsung? Both work. No need to buy two devices.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128190;</div>
-                    <h3>OTA Firmware Updates</h3>
-                    <p>New iOS broke your adapter? Not this one. We push OTA updates to fix compatibility issues. Report a bug — we release a patch. Most adapters? Buy a new one.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128268;</div>
-                    <h3>Plug & Play — No App</h3>
-                    <p>No companion app. No account. No QR codes. Plug into USB, pair via Bluetooth, done. Works the same way every time. Your car, your phone, our adapter — nothing else needed.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#127911;</div>
-                    <h3>Lossless Audio</h3>
-                    <p>Spotify, Apple Music, podcasts, phone calls — all stream at full quality over 5GHz WiFi6. No compression. No delay between video and audio on Maps. Identical to wired.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128207;</div>
-                    <h3>Metal Body, Smallest 2-in-1</h3>
-                    <p>Aluminum alloy housing — not cheap plastic. Smaller than a USB flash drive. Plugs in behind the dash and disappears. USB-A with USB-C adapter included. Clean install, premium feel.</p>
-                </div>
+    <!-- EXPLODED VIEW — 3D Inside the Hardware -->
+    <section class="exploded-section" id="features">
+        <div class="exploded-canvas-wrap">
+            <canvas id="explodedCanvas"></canvas>
+        </div>
+        <div class="container" style="position:relative;z-index:2;pointer-events:none;">
+            <div class="section-header" style="padding-top:40px;">
+                <span class="section-tag">Inside the Hardware</span>
+                <h2>Every component. <span class="gradient-text">Engineered to perform.</span></h2>
             </div>
         </div>
+
+        <!-- HIDDEN old stage — replaced by canvas -->
+        <div class="exploded-stage" style="display:none;">
+            <div class="ex-labels ex-labels-left">
+                    <div class="ex-label" id="lbl2">
+                        <div class="ex-label-content">
+                            <strong>WiFi6 Dual-Band Antenna</strong>
+                            <span>802.11ax · 2.4 + 5.8GHz</span>
+                        </div>
+                        <div class="ex-label-line"></div>
+                    </div>
+                    <div class="ex-label" id="lbl4">
+                        <div class="ex-label-content">
+                            <strong>4-Layer PCB</strong>
+                            <span>FR4 · Gold traces · BT 5.4</span>
+                        </div>
+                        <div class="ex-label-line"></div>
+                    </div>
+                    <div class="ex-label" id="lbl6">
+                        <div class="ex-label-content">
+                            <strong>CNC Bottom Housing</strong>
+                            <span>Precision-matched alloy</span>
+                        </div>
+                        <div class="ex-label-line"></div>
+                    </div>
+                </div>
+
+                <!-- 3D Scene — real component photos -->
+                <div class="exploded-scene" id="explodedScene">
+
+                    <!-- L1: Top shell — pure 3D (rendered by Three.js) -->
+                    <div class="ex-layer" id="exL1"></div>
+
+                    <!-- L2: Main PCB — real WiFi adapter board -->
+                    <div class="ex-layer" id="exL2">
+                        <div class="ex-photo-wrap eph-pcb">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Siemens_Gigaset_USB_Adapter_54_-_board-0311.jpg" alt="Main PCB" class="ex-photo" style="object-position:center 40%;">
+                            <div class="ex-photo-overlay epo-green"></div>
+                            <span class="ex-photo-badge">Main PCB · 4-Layer FR4</span>
+                        </div>
+                    </div>
+
+                    <!-- L3: WiFi+BT Combo SoC — Broadcom BCM chip photo -->
+                    <div class="ex-layer" id="exL3">
+                        <div class="ex-photo-wrap eph-chip">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Broadcom_BCM94313HMGB-7795.jpg" alt="WiFi BT SoC" class="ex-photo" style="object-position:center 20%;">
+                            <div class="ex-photo-overlay epo-blue"></div>
+                            <span class="ex-photo-badge">WiFi6 + BT 5.4 SoC</span>
+                        </div>
+                    </div>
+
+                    <!-- L4: Flash Memory chip — Winbond W25Q -->
+                    <div class="ex-layer" id="exL4">
+                        <div class="ex-photo-wrap eph-flash">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Netgear_GS108E_-_board_-_Winbond_25Q16JVSIQ-1328.jpg" alt="Flash memory" class="ex-photo" style="object-position:center center;">
+                            <div class="ex-photo-overlay epo-dark"></div>
+                            <span class="ex-photo-badge">NAND Flash · 128MB</span>
+                        </div>
+                    </div>
+
+                    <!-- L5: USB-A Connector — gold pins closeup -->
+                    <div class="ex-layer" id="exL5">
+                        <div class="ex-photo-wrap eph-usb">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/USB_TypeA_Plug.JPG" alt="USB connector" class="ex-photo" style="object-position:center 55%;">
+                            <div class="ex-photo-overlay epo-gold"></div>
+                            <span class="ex-photo-badge">Gold-Plated USB-A</span>
+                        </div>
+                    </div>
+
+                    <!-- L6: Bottom housing — CSS metallic -->
+                    <div class="ex-layer" id="exL6">
+                        <div class="ex-body shell-bottom">
+                            <div class="usba-hole"></div>
+                            <div class="usbc-hole"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right labels -->
+                <div class="ex-labels ex-labels-right">
+                    <div class="ex-label" id="lbl1">
+                        <div class="ex-label-line"></div>
+                        <div class="ex-label-content">
+                            <strong>Aluminum Alloy Shell</strong>
+                            <span>CNC-machined · Heat optimized</span>
+                        </div>
+                    </div>
+                    <div class="ex-label" id="lbl3">
+                        <div class="ex-label-line"></div>
+                        <div class="ex-label-content">
+                            <strong>8-Core ARM SoC</strong>
+                            <span>1.8GHz · OTA updates</span>
+                        </div>
+                    </div>
+                    <div class="ex-label" id="lbl5">
+                        <div class="ex-label-line"></div>
+                        <div class="ex-label-content">
+                            <strong>Gold-Plated Connectors</strong>
+                            <span>USB-A + USB-C · 10k cycles</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /exploded-stage hidden -->
+        </div><!-- /container -->
     </section>
 
     <!-- COMPATIBILITY CHECKER -->
@@ -694,12 +771,27 @@
     </footer>
 
     <!-- STICKY MOBILE CTA -->
+    <!-- SOCIAL PROOF POPUP — recent purchase notification -->
+    <div class="sp-popup" id="spPopup">
+        <div class="sp-icon">🛒</div>
+        <div class="sp-text">
+            <div class="sp-name" id="spName">Michael from Austin</div>
+            <div class="sp-product">purchased <strong>AutoLink Pro</strong></div>
+            <div class="sp-time" id="spTime">2 minutes ago</div>
+        </div>
+        <button class="sp-close" id="spClose" aria-label="Close">×</button>
+    </div>
+
     <div class="sticky-mobile-cta" id="stickyMobileCta">
         <a href="#buy" class="btn btn-primary btn-block">
             Order Now — $79.99
         </a>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="js/exploded.js"></script>
     <script src="js/orders.js"></script>
     <script src="js/app.js"></script>
     <script src="js/chat.js"></script>

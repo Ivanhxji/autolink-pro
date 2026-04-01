@@ -163,4 +163,115 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- SOCIAL PROOF POPUP ---
+    (function () {
+        const popup  = document.getElementById('spPopup');
+        const nameEl = document.getElementById('spName');
+        const timeEl = document.getElementById('spTime');
+        const closeBtn = document.getElementById('spClose');
+        if (!popup) return;
+
+        const buyers = [
+            'Michael from Austin', 'Sarah from Los Angeles', 'James from Chicago',
+            'Emma from New York', 'David from Houston', 'Olivia from Phoenix',
+            'Ryan from Seattle', 'Sophia from Miami', 'Daniel from Denver',
+            'Ava from Nashville', 'Chris from Portland', 'Mia from San Diego',
+            'Tyler from Dallas', 'Isabella from Atlanta', 'Jake from Boston'
+        ];
+        const times = [
+            'just now', '1 minute ago', '2 minutes ago', '3 minutes ago',
+            '4 minutes ago', '5 minutes ago', '7 minutes ago', '9 minutes ago'
+        ];
+
+        let hideTimer, nextTimer;
+        let lastIdx = -1;
+
+        function showPopup() {
+            // Pick a random buyer (avoid repeating same)
+            let idx;
+            do { idx = Math.floor(Math.random() * buyers.length); } while (idx === lastIdx);
+            lastIdx = idx;
+
+            nameEl.textContent = buyers[idx];
+            timeEl.textContent = times[Math.floor(Math.random() * times.length)];
+
+            popup.classList.add('sp-visible');
+
+            // Auto-hide after 5s
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(hidePopup, 5000);
+        }
+
+        function hidePopup() {
+            popup.classList.remove('sp-visible');
+            clearTimeout(nextTimer);
+            nextTimer = setTimeout(showPopup, 60000); // show again in 60s
+        }
+
+        closeBtn.addEventListener('click', hidePopup);
+
+        // First show after 8s (let page load)
+        nextTimer = setTimeout(showPopup, 8000);
+    })();
+
+    // --- EXPLODED VIEW — Auto-loop animation ---
+    if (typeof gsap !== 'undefined') {
+        const layerIds  = ['#exL1','#exL2','#exL3','#exL4','#exL5','#exL6'];
+        // Shell goes furthest, internal components spread in the middle
+        const yOffsets  = [-260, -148, -56, 56, 148, 260];
+        const labelIds  = ['#lbl1','#lbl2','#lbl3','#lbl4','#lbl5','#lbl6'];
+
+        const els    = layerIds.map(id => document.querySelector(id)).filter(Boolean);
+        const labels = labelIds.map(id => document.querySelector(id)).filter(Boolean);
+
+        if (els.length) {
+            // Reset all to assembled
+            gsap.set(els, { y: 0 });
+            gsap.set(labels, { opacity: 0 });
+
+            function explodeLoop() {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        // pause 2s fully exploded, then reassemble
+                        setTimeout(reassemble, 2000);
+                    }
+                });
+                // Explode layers with stagger
+                tl.to(els, {
+                    y: (i) => yOffsets[i],
+                    duration: 1.4,
+                    stagger: 0.08,
+                    ease: 'power3.out'
+                });
+                // Labels fade in
+                tl.to(labels, {
+                    opacity: 1,
+                    duration: 0.4,
+                    stagger: 0.08
+                }, 0.5);
+            }
+
+            function reassemble() {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        // pause 1.5s assembled, then explode again
+                        setTimeout(explodeLoop, 1500);
+                    }
+                });
+                // Labels fade out first
+                tl.to(labels, { opacity: 0, duration: 0.3, stagger: 0.05 });
+                // Reassemble
+                tl.to(els, {
+                    y: 0,
+                    duration: 1.2,
+                    stagger: { each: 0.07, from: 'end' },
+                    ease: 'power3.inOut'
+                }, 0.2);
+            }
+
+            // Start after 1s delay
+            setTimeout(explodeLoop, 1000);
+        }
+    }
+
 });
