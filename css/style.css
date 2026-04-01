@@ -918,6 +918,7 @@ ul { list-style: none; }
     height: 44px;
     border: none;
     background: var(--bg-alt);
+    color: #ffffff;
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
