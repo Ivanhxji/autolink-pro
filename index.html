@@ -41,6 +41,7 @@
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
+            <button class="track-btn" id="trackBtn">📦 Track Order</button>
             <a href="#buy" class="nav-cta">Order Now</a>
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
                 <span></span><span></span><span></span>
@@ -767,10 +768,81 @@
         </a>
     </div>
 
+    <!-- TRACK ORDER MODAL -->
+    <div class="track-modal" id="trackModal">
+        <div class="track-overlay" id="trackOverlay"></div>
+        <div class="track-content">
+            <button class="track-close" id="trackClose">&times;</button>
+            <div class="track-icon">📦</div>
+            <h2>Track Your Order</h2>
+            <p>Enter your Order ID (e.g. AL-20260401-123) or tracking number</p>
+            <div class="track-input-row">
+                <input type="text" id="trackInput" placeholder="AL-20260401-123 or 1Z999AA..." autocomplete="off">
+                <button class="btn btn-primary" id="trackSubmit">Track</button>
+            </div>
+            <div class="track-result" id="trackResult" style="display:none;"></div>
+            <div class="track-hint">
+                <span>Order ID is in your confirmation email</span>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="js/orders.js"></script>
     <script src="js/app.js"></script>
     <script src="js/chat.js"></script>
+    <script>
+    // Track Order Modal
+    const trackBtn = document.getElementById('trackBtn');
+    const trackModal = document.getElementById('trackModal');
+    const trackOverlay = document.getElementById('trackOverlay');
+    const trackClose = document.getElementById('trackClose');
+    const trackSubmit = document.getElementById('trackSubmit');
+    const trackInput = document.getElementById('trackInput');
+    const trackResult = document.getElementById('trackResult');
+
+    trackBtn.addEventListener('click', () => { trackModal.classList.add('active'); trackInput.focus(); });
+    trackOverlay.addEventListener('click', closeTrack);
+    trackClose.addEventListener('click', closeTrack);
+    function closeTrack() { trackModal.classList.remove('active'); trackResult.style.display='none'; trackInput.value=''; }
+
+    trackInput.addEventListener('keydown', e => { if(e.key==='Enter') trackSubmit.click(); });
+
+    trackSubmit.addEventListener('click', async () => {
+        const val = trackInput.value.trim();
+        if(!val) return;
+        trackResult.style.display = 'block';
+        trackResult.className = 'track-result loading';
+        trackResult.innerHTML = '⏳ Looking up your order...';
+
+        // AL- order ID → look up in Google Sheets via n8n
+        if(val.toUpperCase().startsWith('AL-')) {
+            try {
+                const resp = await fetch('https://maliutin.app.n8n.cloud/webhook/track-order?id=' + encodeURIComponent(val));
+                const data = await resp.json();
+                if(data.found) {
+                    trackResult.className = 'track-result success';
+                    trackResult.innerHTML =
+                        '<strong>Order found ✅</strong><br>' +
+                        '📦 ' + (data.product||'AutoLink Pro') + ' x' + (data.quantity||1) + '<br>' +
+                        '📅 Ordered: ' + (data.date||'—') + '<br>' +
+                        '🚚 Status: <strong>' + (data.status||'Processing') + '</strong>' +
+                        (data.tracking ? '<br>🔢 Tracking: <strong>' + data.tracking + '</strong><br><a href="https://www.17track.net/en?nums=' + data.tracking + '" target="_blank" class="track-link">Track on 17track →</a>' : '<br><span style="color:#5f6b7a;font-size:13px;">Tracking will appear here once shipped (7-14 days)</span>');
+                } else {
+                    trackResult.className = 'track-result error';
+                    trackResult.innerHTML = '❌ Order not found. Check your Order ID in the confirmation email.';
+                }
+            } catch(e) {
+                trackResult.className = 'track-result error';
+                trackResult.innerHTML = '❌ Could not connect. Try again in a moment.';
+            }
+        } else {
+            // Raw tracking number → redirect to 17track
+            trackResult.className = 'track-result success';
+            trackResult.innerHTML = '🔢 Tracking number detected!<br><a href="https://www.17track.net/en?nums=' + encodeURIComponent(val) + '" target="_blank" class="track-link">Track your package on 17track →</a>';
+        }
+    });
+    </script>
 </body>
 </html>
