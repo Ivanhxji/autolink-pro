@@ -1,9 +1,8 @@
 /* ============================================
-   ORDERS MODULE — Checkout form + Google Sheets
+   ORDERS MODULE — Stripe Checkout via n8n
    ============================================ */
 
-// ВСТАВЬ СЮДА URL ИЗ GOOGLE APPS SCRIPT DEPLOY
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwK5VitNwbWC2A3rbGVOh5hQ3JPgD9O6BgLpvORsduTJWZzIrld-pVFm8Nuz1Yo4pw/exec';
+const STRIPE_CHECKOUT_URL = 'https://maliutin.app.n8n.cloud/webhook/create-checkout';
 
 const PRODUCT_NAME = 'AutoLink Pro — Wireless CarPlay & Android Auto Adapter';
 const PRODUCT_PRICE = 59.99;
@@ -115,24 +114,17 @@ function createCheckoutModal() {
                         <textarea name="notes" rows="2" placeholder="Car model, special requests..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary btn-xl checkout-submit" id="checkoutSubmit">
-                        Place Order — <span id="submitTotal">$59.99</span>
-                        <span class="btn-subtext">You'll receive order confirmation by email</span>
+                        Pay Securely — <span id="submitTotal">$59.99</span>
+                        <span class="btn-subtext">&#128274; Powered by Stripe — card details on next page</span>
                     </button>
-                    <p class="checkout-disclaimer">&#128274; Your data is secure. We never share your information.</p>
+                    <p class="checkout-disclaimer">&#128274; Secure payment via Stripe. We never store your card details.</p>
                 </form>
 
-                <!-- Success state -->
+                <!-- Redirecting state -->
                 <div class="checkout-success" id="checkoutSuccess" style="display:none;">
-                    <div class="success-icon">&#9989;</div>
-                    <h2>Order Placed!</h2>
-                    <p class="success-order-num" id="successOrderNum"></p>
-                    <p>We'll send a confirmation email to <strong id="successEmail"></strong> with tracking details within 24 hours.</p>
-                    <div class="success-details">
-                        <div><strong>Product:</strong> AutoLink Pro</div>
-                        <div><strong>Shipping:</strong> FREE — 5-14 business days</div>
-                        <div><strong>Guarantee:</strong> 30-day money back</div>
-                    </div>
-                    <button class="btn btn-primary" onclick="closeCheckout()">Close</button>
+                    <div class="success-icon">&#128515;</div>
+                    <h2>Redirecting to payment...</h2>
+                    <p>You'll be taken to Stripe's secure checkout to enter your card details.</p>
                 </div>
             </div>
         </div>
@@ -176,33 +168,27 @@ function initCheckoutEvents() {
         };
 
         try {
-            // Save to Google Sheets
-            await fetch(GOOGLE_SHEETS_URL, {
+            // Create Stripe Checkout Session via n8n
+            const resp = await fetch(STRIPE_CHECKOUT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
             });
+            const result = await resp.json();
 
-            // Notify n8n → Telegram (fire and forget)
-            fetch('https://maliutin.app.n8n.cloud/webhook/new-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            }).catch(() => {});
-
-            // Show success (no-cors = opaque response, so we assume success)
-            form.style.display = 'none';
-            const successDiv = document.getElementById('checkoutSuccess');
-            successDiv.style.display = 'block';
-            document.getElementById('successEmail').textContent = orderData.email;
-            document.getElementById('successOrderNum').textContent =
-                'Order #AL-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(Math.random()*900+100);
+            if (result.url) {
+                // Show redirect state briefly then redirect
+                form.style.display = 'none';
+                document.getElementById('checkoutSuccess').style.display = 'block';
+                setTimeout(() => { window.location.href = result.url; }, 800);
+            } else {
+                throw new Error(result.error || 'No checkout URL returned');
+            }
 
         } catch (err) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `Place Order — <span id="submitTotal">$${total}</span><span class="btn-subtext">You'll receive order confirmation by email</span>`;
-            alert('Something went wrong. Please try again or contact support.');
+            submitBtn.innerHTML = `Pay Securely — <span id="submitTotal">$${total}</span><span class="btn-subtext">&#128274; Powered by Stripe — card details on next page</span>`;
+            alert('Something went wrong. Please try again or contact support@getautolink.shop');
         }
     });
 }

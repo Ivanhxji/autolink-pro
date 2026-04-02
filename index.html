@@ -844,5 +844,27 @@
         }
     });
     </script>
+
+    <script>
+    // Handle Stripe payment return
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('payment') === 'success') {
+            history.replaceState({}, '', '/');
+            const banner = document.createElement('div');
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#16a34a;color:#fff;text-align:center;padding:18px 20px;font-size:18px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2)';
+            banner.innerHTML = '✅ Payment successful! Your order is confirmed. Check your email for details. <button onclick="this.parentNode.remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;margin-left:16px;">×</button>';
+            document.body.prepend(banner);
+            setTimeout(() => banner.remove(), 12000);
+        } else if (params.get('payment') === 'cancel') {
+            history.replaceState({}, '', '/');
+            const banner = document.createElement('div');
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#dc2626;color:#fff;text-align:center;padding:16px 20px;font-size:16px;font-weight:600';
+            banner.innerHTML = 'Payment cancelled — your cart is saved. <a href="#buy" style="color:#fff;text-decoration:underline;margin-left:8px;">Try again →</a> <button onclick="this.parentNode.remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;margin-left:16px;">×</button>';
+            document.body.prepend(banner);
+            setTimeout(() => banner.remove(), 8000);
+        }
+    })();
+    </script>
 </body>
 </html>
