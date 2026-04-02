@@ -2182,7 +2182,8 @@ ul { list-style: none; }
 
 .track-input-row input {
     flex: 1;
-    padding: 12px 16px;
+    min-width: 0;
+    padding: 14px 16px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
     font-size: 14px;
@@ -2190,6 +2191,14 @@ ul { list-style: none; }
     color: var(--text);
     outline: none;
     transition: var(--transition);
+}
+
+.track-input-row .btn {
+    flex-shrink: 0;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 .track-input-row input:focus { border-color: var(--accent); }
 .track-input-row input::placeholder { color: var(--text-light); }
