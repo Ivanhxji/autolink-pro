@@ -5,7 +5,7 @@
 const STRIPE_CHECKOUT_URL = 'https://maliutin.app.n8n.cloud/webhook/create-checkout';
 
 const PRODUCT_NAME = 'AutoLink Pro — Wireless CarPlay & Android Auto Adapter';
-const PRODUCT_PRICE = 59.99;
+const PRODUCT_PRICE = 79.99;
 
 // --- Create checkout modal ---
 function createCheckoutModal() {

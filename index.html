@@ -100,7 +100,7 @@
                 </div>
                 <div class="hero-cta-group">
                     <a href="#buy" class="btn btn-primary btn-lg">
-                        Order Now — $59.99
+                        Order Now — $79.99
                         <span class="btn-subtext">Free shipping · 30-day guarantee</span>
                     </a>
                 </div>
@@ -862,7 +862,7 @@
         const params = new URLSearchParams(window.location.search);
         if (params.get('payment') === 'success') {
             history.replaceState({}, '', '/');
-            if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 59.99, currency: 'USD'});
+            if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 79.99, currency: 'USD'});
             const banner = document.createElement('div');
             banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#16a34a;color:#fff;text-align:center;padding:18px 20px;font-size:18px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2)';
             banner.innerHTML = '✅ Payment successful! Your order is confirmed. Check your email for details. <button onclick="this.parentNode.remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;margin-left:16px;">×</button>';
