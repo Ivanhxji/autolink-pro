@@ -194,6 +194,7 @@ function initCheckoutEvents() {
 }
 
 function openCheckout() {
+    if(typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', {value: PRODUCT_PRICE, currency: 'USD'});
     const modal = document.getElementById('checkoutModal');
     const qty = parseInt(document.getElementById('qtyInput').value) || 1;
     const total = (PRODUCT_PRICE * qty).toFixed(2);
